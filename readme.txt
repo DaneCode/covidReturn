@@ -9,3 +9,5 @@ The output is one of the following:
     "Placed off work until test results. If positive, follow positive test guidelines. If negative, return when symptom free"
     "ok to work, wear mask for 10 days"
     "ok to work"
+
+This program was intentinally written within the index.html to make it a single self contained file.
