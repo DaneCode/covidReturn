@@ -7,33 +7,31 @@
         var symptoms = $("input[name='symptoms']:checked").val();
         var test = $("input[name='test']:checked").val();
         var exposure = $("input[name='exposure']:checked").val();
+        var live = $("input[name='live']:checked").val();
         var output;
         if (symptoms === "yes" && test === "not-yet" && exposure === "no" && live === "no") {
           output = "ok to return to work once symptom free";
         }
-        else if (test === "positive") {
+        else if (test === "positive" || exposure === "yes" && symptoms === "yes") {
           output = "Placed on 5 day quarantine & must wear a mask for 5 additional days upon return";
         }
         else if (test === "pending" && symptoms === "yes") {
           output = "Placed off work until test results. If positive: 5 day quarantine & wear mask for 5 days after. If negative: return when symptom free";
         }
-        else if (test === "pending" && symptoms === "no" && live === "no") {
+        else if (test === "pending") {
           output = "ok to work pending test result. If positive: 5 day quarantine & wear mask for 5 days after. If negative: return when symptom free";
-        }
-        else if (exposure === "yes" && symptoms === "yes") {
-          output = "Placed on 5 day quarantine & wear mask for 5 days after";
         }
         else if (symptoms === "yes" && test === "not-yet") {
           output = "Placed off work until test results. If positive, follow positive test guidelines. If negative, return when symptom free";
         }
-        else if (symptoms === "no" && test === "not-yet") {
-          output = "ok to work, wear mask for 10 days";
-        }
-        else if (exposure === "yes" && symptoms === "no") {
+        else if (exposure === "yes" && symptoms === "no" || live === "yes" || exposure === "yes") {
           output = "ok to work, wear mask for 10 days";
         }
         else if (exposure === "no" && symptoms === "no") {
           output = "ok to work";
+        }
+        else {
+          output = "Broken test results";
         }
         $("#output").html(output);
       });
@@ -80,6 +78,7 @@
         cursor: pointer; /* Add a pointer cursor on hover */
         border-radius: 5px; /* Add rounded corners */
         font-weight: bold; /* Increase font weight */
+        box-shadow: 2px 2px 5px #9ED5C5;
     }
     form {
       background-color: #BCEAD5;
@@ -119,7 +118,13 @@
       cursor: pointer;
       font-weight: bold;
     }
-
+    input[type="submit"]:hover {
+      background-color: #9ED5C5;
+    }
+    input[type='radio'] { 
+     transform: scale(2);
+     margin: 5px 0 5px 0; 
+    }
     #output {
       background-color: #BCEAD5;
       box-shadow: 2px 2px 5px #9ED5C5;
@@ -132,32 +137,49 @@
       font-size: 2em;
       color: red;
     }
+    p {
+      font-size: 5em;
+      font-weight: bold;
+    }
      </style>
 </head>
 <body>
   <h1>Determining Quarantine and Mask Requirements</h1>
   <form>
     <div class="form-group">
+      <h3>Traveling commercially is no longer a factor in returning to work</h3>
+    </div>
+    <div class="form-group">
         <h3>Do you have symptoms?</h3>
-        <input type="radio" name="symptoms" value="yes">Yes<br>
-        <input type="radio" name="symptoms" value="no">No<br>
+        <label for="symptomsYes">Yes</label>
+        <input type="radio" id="symptomsYes" name="symptoms" value="yes">
+        <label for="symptomsNo">No</label>
+        <input type="radio" id="symptomsNo" name="symptoms" value="no">
     </div>
     <div class="form-group">
         <h3>Have you been tested for COVID-19?</h3>
-        <input type="radio" name="test" value="positive">Positive<br>
-        <input type="radio" name="test" value="not-yet">Not yet/No<br>
-        <input type="radio" name="test" value="negative">Negative<br>
-        <input type="radio" name="test" value="pending">Pending Test<br>
+        <label for="positive">Positive</label>
+        <input type="radio" id="positive" name="test" value="positive">
+        <label for="notYet">Not yet/No</label>
+        <input type="radio" id="notYet" name="test" value="not-yet">
+        <label for="negative">Negative</label>
+        <input type="radio" id="negative" name="test" value="negative">
+        <label for="pending">Pending Test</label>
+        <input type="radio" id="pending" name="test" value="pending">
     </div>
     <div class="form-group">
         <h3>Have you been exposed to someone with COVID-19 or symptoms?</h3>
-        <input type="radio" name="exposure" value="yes">Yes<br>
-        <input type="radio" name="exposure" value="no">No<br>
+        <label for="exposureYes">Yes</label>
+        <input type="radio" id="exposureYes" name="exposure" value="yes">
+        <label for="exposureNo">No</label>
+        <input type="radio" id="exposureNo" name="exposure" value="no">
     </div>
     <div class="form-group">
-        <h3>Do you live with someone with a person that is positive or a pending test result for COVID?</h3>
-        <input type="radio" name="live" value="yes">Yes<br>
-        <input type="radio" name="live" value="no">No<br>
+        <h3>Do you live with a person that is positive or has a pending test result for COVID?</h3>
+        <label for="liveWithYes">Yes</label>
+        <input type="radio" id="liveWithYes" name="live" value="yes">
+        <label for="liveWithNo">No</label>
+        <input type="radio" id="liveWithNo" name="live" value="no">
     </div>
   </form>
   <div id="output"></div>
